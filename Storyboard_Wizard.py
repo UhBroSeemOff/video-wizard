@@ -11,9 +11,11 @@ class Storyboard_Wizard:
         self.__video_is_opened = False
 
     def open(self, path):
-        self.__captured_video = cv2.VideoCapture(path)
-        self.__frame_number = self.__captured_video.get(cv2.CAP_PROP_FRAME_COUNT)
-        self.__video_is_opened = True
+        if os.path.exists(path):
+            self.__captured_video = cv2.VideoCapture(path)
+            self.__frame_number = self.__captured_video.get(cv2.CAP_PROP_FRAME_COUNT)
+            self.__video_is_opened = True
+        return self.__video_is_opened
 
     def change_output_directory(self, path):
         self.__output_directory = path
@@ -53,8 +55,12 @@ class Storyboard_Wizard:
 if __name__ == "__main__":
     video_name = input('\n' + "Please give the video name including its extension" + '\n')
     storyboard_wizard = Storyboard_Wizard()
-    storyboard_wizard.open(video_name)
-    print("\n Video opened! It has " + str(storyboard_wizard.get_frame_number()) + "frames")
-    storyboard_wizard.get_storyboard()
-    storyboard_wizard.close()
-    print("Done!")
+    video_is_opened = storyboard_wizard.open(video_name)
+    if video_is_opened:
+        print("\n Video opened! It has " + str(storyboard_wizard.get_frame_number()) + " frames")
+        storyboard_wizard.get_storyboard()
+        storyboard_wizard.close()
+        print("Done!")
+    else:
+        print("\n Can't find that file!")
+    input()
