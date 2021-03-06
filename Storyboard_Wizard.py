@@ -2,6 +2,7 @@ import numpy
 import cv2
 import os
 import shutil
+from tqdm import tqdm
 
 class Storyboard_Wizard:
     def __init__(self):
@@ -35,7 +36,6 @@ class Storyboard_Wizard:
     def __remake_output_directory__(self):
         if os.path.exists(self.__output_directory):
             shutil.rmtree(self.__output_directory, True)
-
         os.mkdir(self.__output_directory) 
 
     def __get_frame__(self, captured_video, index_of_frame):
@@ -46,18 +46,16 @@ class Storyboard_Wizard:
         cv2.imwrite(image_name, image)
 
     def __write_all_frames__(self):
-        current_frame = 0
-        while (current_frame < self.__frame_number):
+        for current_frame in tqdm(range(int(self.__frame_number)), ascii=True, unit="frame", ncols=150):
             image = self.__get_frame__(self.__captured_video, 2)
-            self.__write_image__(self.__output_directory + '/' + str(current_frame) + ".jpg", image)
-            current_frame += 1
+            self.__write_image__("{}/{}.jpg".format(self.__output_directory, current_frame), image)
 
 if __name__ == "__main__":
     video_name = input('\n' + "Please give the video name including its extension" + '\n')
     storyboard_wizard = Storyboard_Wizard()
     video_is_opened = storyboard_wizard.open(video_name)
     if video_is_opened:
-        print("\n Video opened! It has " + str(storyboard_wizard.get_frame_number()) + " frames")
+        print("\n Video opened! It has {} frames".format(storyboard_wizard.get_frame_number()))
         storyboard_wizard.get_storyboard()
         storyboard_wizard.close()
         print("Done!")
