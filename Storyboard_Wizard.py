@@ -46,7 +46,7 @@ class Storyboard_Wizard:
         cv2.imwrite(image_name, image)
 
     def __write_all_frames__(self):
-        for current_frame in tqdm(range(int(self.__frame_number)), ascii=True, unit="frame", ncols=150):
+        for current_frame in tqdm(range(int(self.__frame_number)), ascii=True, unit="frame", ncols=100, leave=True, position=0):
             image = self.__get_frame__(self.__captured_video, 2)
             self.__write_image__("{}/{}.jpg".format(self.__output_directory, current_frame), image)
 
