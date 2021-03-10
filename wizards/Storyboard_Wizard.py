@@ -9,12 +9,14 @@ class Storyboard_Wizard:
         self.__output_directory = "Output"
         self.__captured_video = cv2.VideoCapture()
         self.__frame_number = 0
+        self.__frame_rate = 0
         self.__video_is_opened = False
 
     def open(self, path):
         if os.path.exists(path):
             self.__captured_video = cv2.VideoCapture(path)
             self.__frame_number = self.__captured_video.get(cv2.CAP_PROP_FRAME_COUNT)
+            self.__frame_rate = self.__captured_video.get(cv2.CAP_PROP_FPS)
             self.__video_is_opened = True
         return self.__video_is_opened
 
@@ -24,6 +26,9 @@ class Storyboard_Wizard:
 
     def get_frame_number(self):
         return self.__frame_number
+
+    def get_framerate(self):
+        return self.__frame_rate
 
     def get_storyboard(self):
         self.__remake_output_directory__()
