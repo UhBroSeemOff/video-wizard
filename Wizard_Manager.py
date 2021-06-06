@@ -41,9 +41,11 @@ class Wizard_manager:
         if self.__request_queue.empty() == True:
             print("Choose file's index")
             self.__look_around__()
-            number_of_selection = int(input())
+            self.__show_files__()
+            number_of_selection = self.__convert_parameter_to_file_index__(input())
         else:
             parameter = self.__request_queue.get()
+            self.__look_around__()
             number_of_selection = self.__convert_parameter_to_file_index__(parameter)
         if number_of_selection > 0 & number_of_selection <= len(self.__files):
             self.__selected_file = self.__files[number_of_selection-1]
@@ -68,10 +70,12 @@ class Wizard_manager:
 
     def __look_around__(self):
             self.__files = self.__file_wizard.look_around(self.__extension)
-            file_number = 1
-            for file in self.__files:
-                print(" {} {}".format(str(file_number), str(file)))
-                file_number += 1
+
+    def __show_files__(self):
+        file_number = 1
+        for file in self.__files:
+            print(" {} {}".format(str(file_number), str(file)))
+            file_number += 1
 
     def __store_queue__(self, queue):
         while queue.empty() == False:
